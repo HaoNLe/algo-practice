@@ -1,0 +1,1 @@
+export type testCase = [object | any, any]
