@@ -48,6 +48,7 @@ import { treeNode, testCase } from "./resources/types";
 
 /*
 SOLUTION
+  TODO -> LOOKUP HOW TO TRANSLATE BINARY TREE TO ARRAY
 
 General idea
 [TODO]
