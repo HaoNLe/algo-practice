@@ -54,7 +54,7 @@ Pitfalls
       2, 2, 3, 2
       2, 3, 2, 2
 
-Pseudocode
+PSEUDOCODE
 
   Sub-Routine: candidates, target
     LET R-solutions

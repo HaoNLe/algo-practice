@@ -15,5 +15,6 @@ import { TreeNode } from "./types";
  */
 
 function distanceK(root: TreeNode | null, target: TreeNode | null, k: number): number[] {
-    
+
+  return [];
 };
