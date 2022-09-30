@@ -1,4 +1,4 @@
-import { testCase } from "./types";
+import { testCase } from "./resources/types";
 
 function lengthOfLongestSubstring(s: string): number {
   // letter => lastIndex

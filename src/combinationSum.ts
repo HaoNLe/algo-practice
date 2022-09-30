@@ -1,4 +1,4 @@
-import { testCase } from "./types";
+import { testCase } from "./resources/types";
 
 /*
 Four steps
