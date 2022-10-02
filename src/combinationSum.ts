@@ -79,14 +79,14 @@ function combinationSum(input: {candidates: number[], target: number}): number[]
   let currIndex = 0
   
   while (currIndex < candidates.length) {
-    let currCandidate = candidates[currIndex];
-    let newTarget = target - currCandidate;
+    const currCandidate = candidates[currIndex];
+    const newTarget = target - currCandidate;
       
     if (newTarget === 0) {
       solutions.push([currCandidate]);
     } 
     else if (newTarget > 0) {
-      let subRoutineSolutions = combinationSum(
+      const subRoutineSolutions = combinationSum(
         {
           candidates: candidates.slice(currIndex),
           target: newTarget

@@ -2,8 +2,8 @@ import { testCase } from "./resources/types";
 
 function lengthOfLongestSubstring(s: string): number {
   // letter => lastIndex
-  let stringToAssess = new String(s);
-  let indexMap = new Map<string, number>();
+  const stringToAssess = new String(s);
+  const indexMap = new Map<string, number>();
   let currMax = 0;
   let currIndex = 0;
   let lastRepeatIndex = -1;
@@ -14,7 +14,7 @@ function lengthOfLongestSubstring(s: string): number {
   // set indexMap(char -> currentIndex)
   // newMax = currentIndex - lastRepeatIndex 
   while (currIndex < stringToAssess.length) {
-    let char = stringToAssess[currIndex];
+    const char = stringToAssess[currIndex];
     let lastSeenIndexOfChar = indexMap.get(char);
 
     if (lastSeenIndexOfChar === undefined) {
@@ -27,14 +27,14 @@ function lengthOfLongestSubstring(s: string): number {
 
     indexMap.set(char, currIndex);
 
-    let newMax = currIndex - lastRepeatIndex;
+    const newMax = currIndex - lastRepeatIndex;
 
     currMax = newMax > currMax ? newMax : currMax;
     currIndex++;
   }
   
   return currMax;
-};
+}
 
 export const testCases: testCase[]= [["abcabcbb", 3], ["bbbbb", 1], ["pwwkew", 3], ["", 0], [" ", 1], ["au", 2], ["abc", 3]];
 

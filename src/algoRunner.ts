@@ -7,8 +7,8 @@ function RunTestCases() {
   let casesPassed = 0;
 
   functionUnderTest.testCases.forEach((testCase) => {
-    let actual = functionUnderTest.default(testCase[0]);
-    let testCasePassed = logTestCaseOutput(testCase[0], testCase[1], actual);
+    const actual = functionUnderTest.default(testCase[0]);
+    const testCasePassed = logTestCaseOutput(testCase[0], testCase[1], actual);
 
     casesPassed = testCasePassed ? casesPassed + 1 : casesPassed;
   });
