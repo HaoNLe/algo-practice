@@ -42,29 +42,87 @@ import { treeNode, testCase } from "./resources/types";
     Explanation: The nodes that are a distance 2 from the target node (with value 5) have
                  values 7, 4, and 1.
 
+
     Input: root = [1], target = 1, k = 3
     Output: []
 */
 
 /*
 SOLUTION
-  TODO -> LOOKUP HOW TO TRANSLATE BINARY TREE TO ARRAY
 
 General idea
-[TODO]
+  1. Convert tree to bi-directional graph
+    - Start from root and traverse the tree
+    - Convert all uni-directional edges to bi-directional so that we may run a graph search
+  2. BFS
+    - Take the target node, and run BFS (with k as the edge distance)
+    - BFS - use a hashset to store seen nodes
+    - Once k is reached, return the node value
+  
+  Optimization:
+    Normal BFS from the target treenode (since we're given a pointer to it) down k-distance. 
+    Return node value once target distance reach
 
-Base cases
-  1. [TODO]
+Base cases (for step 1)
+  1. Root is null
 
 Pitfalls
-  1. [TODO]
+  
 
 PSEUDOCODE
   [TODO]
 
 */
 
+class treeNodeWithParent extends treeNode {
+  constructor(
+    public val?: number,
+    public left?: treeNodeWithParent | null,
+    public right?: treeNodeWithParent | null,
+    public parent?: treeNodeWithParent | null,
+  ) {
+    super();
+  }
+}
+
 function distanceK(root: treeNode | null, target: treeNode | null, k: number): number[] {
+  const biTreeRoot = convertTreeToGraph(root, null);
+  const seen = new Set<Number>();
+  const results = kDistanceBFS(biTreeRoot, k);
 
   return [];
 }
+
+function convertTreeToGraph(root: treeNodeWithParent | null | undefined, parent: treeNodeWithParent | null) : treeNodeWithParent | null {
+  if (root === null || root === undefined) {
+    return null;
+  }
+  
+  root = new treeNodeWithParent(
+    root.val,
+    root.left,
+    root.right,
+  );
+
+  root.parent = parent;
+  convertTreeToGraph(root.left, root);
+  convertTreeToGraph(root.right, root);
+
+  return root;
+}
+
+function kDistanceBFS(root: treeNodeWithParent | null | undefined, k: number) {
+  if (root === null || root === undefined) {
+    return null;
+  }
+
+  if (k === 0) {
+    return root.val;
+  }
+
+  kDistanceBFS(root.parent, k-1);
+  kDistanceBFS(root.left, k-1);
+  kDistanceBFS(root.right, k-1);
+}
+
+export default distanceK;
