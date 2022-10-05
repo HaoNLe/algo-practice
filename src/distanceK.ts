@@ -74,14 +74,41 @@ PSEUDOCODE
 
 */
 
+class a {
+  x: number;
+
+  constructor(x:number){
+    this.x = x;
+  }
+}
+
+class b extends a {
+  y: number;
+  constructor(x:number, y:number){
+    super(x);
+    this.y = y;
+  }
+}
+
+function testfunc(input: a) : number {
+  return input.x;
+}
+
+let bvar = new b(1, 2);
+let avar = new a(1);
+testfunc(bvar);
+testfunc(avar);
+
 class treeNodeWithParent extends treeNode {
-  constructor(
-    public val?: number,
-    public left?: treeNodeWithParent | null,
-    public right?: treeNodeWithParent | null,
-    public parent?: treeNodeWithParent | null,
-  ) {
+  left: treeNodeWithParent | null;
+  right: treeNodeWithParent | null;
+  parent: treeNodeWithParent | null;
+  constructor(val?: number, left?: treeNodeWithParent | null, right?: treeNodeWithParent | null, parent?: treeNodeWithParent | null) {
     super();
+    this.val = (val===undefined ? 0 : val)
+    this.left = (left===undefined ? null : left)
+    this.right = (right===undefined ? null : right)
+    this.parent = (parent===undefined ? null : parent)
   }
 }
 
@@ -98,31 +125,33 @@ function distanceK(root: treeNode | null, target: treeNode | null, k: number): n
   return results;
 }
 
-function convertTreeToGraph(root: treeNodeWithParent | null ,
+function convertTreeToGraph(root: treeNodeWithParent | treeNode | null ,
   parent: treeNodeWithParent | null,
   target: number | undefined ) : treeNodeWithParent | null {
   if (root === null || root === undefined) {
     return null;
   }
 
-  root = new treeNodeWithParent(
+  let newRoot: treeNodeWithParent = new treeNodeWithParent(
     root.val,
-    root.left,
-    root.right,
+    null,
+    null,
     parent,
   );
 
-  let left = convertTreeToGraph(root.left === undefined ? null : root.left, root, target);
-  let right = convertTreeToGraph(root.right === undefined ? null : root.right, root, target);
+  const left = convertTreeToGraph(root.left === undefined ? null : root.left, newRoot, target);
+  const right = convertTreeToGraph(root.right === undefined ? null : root.right, newRoot, target);
+  newRoot.left = left;
+  newRoot.right = right;
 
   if (left !== null) return left;
 
   if (right !== null) return right;
 
-  return root.val === target ? root : null;
+  return newRoot.val === target ? newRoot : null;
 }
 
-function kDistanceTreeBFS(root: treeNodeWithParent | null | undefined,
+function kDistanceTreeBFS(root: treeNodeWithParent | null ,
   seenNodes: Set<number>,
   k: number) : number[] {
   if (root === null || root === undefined) return [];
@@ -150,3 +179,7 @@ export const testCases: testCase[]= [
 ];
 
 export default distanceK;
+
+//[3,5,1,6,2,0,8,n,n,7,4]
+// 0 1 1 2 2 2 2 3 3 3 3
+// 0 1 2 3 4 5 6 7 8 9 10
