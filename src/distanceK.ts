@@ -89,47 +89,64 @@ function distanceK(root: treeNode | null, target: treeNode | null, k: number): n
   if (target === null || target.val === null) return [];
 
   const targetNode = convertTreeToGraph(root, null, target?.val);
-  const results = kDistanceBFS(targetNode, k);
 
-  return [];
+  const seenNodes = new Set<number>();
+  seenNodes.add(-1);    // Stand-in for undefined - we don't want infinite loops over nodes with undefined vals
+
+  const results = kDistanceTreeBFS(targetNode, seenNodes, k);
+
+  return results;
 }
 
-function convertTreeToGraph(root: treeNodeWithParent | null | undefined,
+function convertTreeToGraph(root: treeNodeWithParent | null ,
   parent: treeNodeWithParent | null,
-  target: number | null | undefined) : treeNodeWithParent | null {
+  target: number | undefined ) : treeNodeWithParent | null {
   if (root === null || root === undefined) {
     return null;
   }
-  
+
   root = new treeNodeWithParent(
     root.val,
     root.left,
     root.right,
+    parent,
   );
 
-  root.parent = parent;
-  let left = convertTreeToGraph(root.left, root, target);
-  let right = convertTreeToGraph(root.right, root, target);
+  let left = convertTreeToGraph(root.left === undefined ? null : root.left, root, target);
+  let right = convertTreeToGraph(root.right === undefined ? null : root.right, root, target);
 
   if (left !== null) return left;
-  
+
   if (right !== null) return right;
-  
+
   return root.val === target ? root : null;
 }
 
-function kDistanceBFS(root: treeNodeWithParent | null | undefined, k: number) {
-  if (root === null || root === undefined) {
-    return null;
-  }
+function kDistanceTreeBFS(root: treeNodeWithParent | null | undefined,
+  seenNodes: Set<number>,
+  k: number) : number[] {
+  if (root === null || root === undefined) return [];
 
-  if (k === 0) {
-    return root.val;
-  }
+  let val = root.val !== undefined ? root.val : -1;
+  if (seenNodes.has(val)) return [];
+  
+  seenNodes.add(val);
 
-  kDistanceBFS(root.parent, k-1);
-  kDistanceBFS(root.left, k-1);
-  kDistanceBFS(root.right, k-1);
+  if (k === 0) return [val];
+
+  let parentResults = kDistanceTreeBFS(root.parent, seenNodes, k-1);
+  let leftResults = kDistanceTreeBFS(root.left, seenNodes, k-1);
+  let rightResults = kDistanceTreeBFS(root.right, seenNodes, k-1);
+  let totalResults = parentResults.concat(leftResults.concat(rightResults));
+
+  return totalResults;
 }
+
+export const testCases: testCase[]= [
+  [
+    {},
+    [true]
+  ]
+];
 
 export default distanceK;
