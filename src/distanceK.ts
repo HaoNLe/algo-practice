@@ -86,14 +86,17 @@ class treeNodeWithParent extends treeNode {
 }
 
 function distanceK(root: treeNode | null, target: treeNode | null, k: number): number[] {
-  const biTreeRoot = convertTreeToGraph(root, null);
-  const seen = new Set<Number>();
-  const results = kDistanceBFS(biTreeRoot, k);
+  if (target === null || target.val === null) return [];
+
+  const targetNode = convertTreeToGraph(root, null, target?.val);
+  const results = kDistanceBFS(targetNode, k);
 
   return [];
 }
 
-function convertTreeToGraph(root: treeNodeWithParent | null | undefined, parent: treeNodeWithParent | null) : treeNodeWithParent | null {
+function convertTreeToGraph(root: treeNodeWithParent | null | undefined,
+  parent: treeNodeWithParent | null,
+  target: number | null | undefined) : treeNodeWithParent | null {
   if (root === null || root === undefined) {
     return null;
   }
@@ -105,10 +108,14 @@ function convertTreeToGraph(root: treeNodeWithParent | null | undefined, parent:
   );
 
   root.parent = parent;
-  convertTreeToGraph(root.left, root);
-  convertTreeToGraph(root.right, root);
+  let left = convertTreeToGraph(root.left, root, target);
+  let right = convertTreeToGraph(root.right, root, target);
 
-  return root;
+  if (left !== null) return left;
+  
+  if (right !== null) return right;
+  
+  return root.val === target ? root : null;
 }
 
 function kDistanceBFS(root: treeNodeWithParent | null | undefined, k: number) {
